@@ -1,43 +1,66 @@
 <template>
   <div class="app">
-    <header class="top-nav">
-      <div class="nav-container">
-        <div class="logo">
-          <h1>{{ t('nav.companyName') }}</h1>
-          <span class="subtitle">{{ t('nav.subtitle') }}</span>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" fill="currentColor" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.7" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.7" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.4" />
+        </svg>
+        <div class="logo-text">
+          <div class="logo-name">{{ t('nav.companyName') }}</div>
+          <div class="logo-sub">{{ t('nav.subtitle') }}</div>
         </div>
-        <nav class="nav-tabs">
-          <router-link to="/" :class="{ active: $route.path === '/' }">
-            {{ t('nav.overview') }}
-          </router-link>
-          <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
-            {{ t('nav.inventory') }}
-          </router-link>
-          <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
-            {{ t('nav.orders') }}
-          </router-link>
-          <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
-            {{ t('nav.finance') }}
-          </router-link>
-          <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
-            {{ t('nav.demandForecast') }}
-          </router-link>
-          <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
-            Reports
-          </router-link>
-        </nav>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main">
+        <router-link to="/" :class="{ active: $route.path === '/' }">
+          <NavIcon name="grid" />
+          <span class="nav-label">{{ t('nav.overview') }}</span>
+        </router-link>
+        <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
+          <NavIcon name="box" />
+          <span class="nav-label">{{ t('nav.inventory') }}</span>
+        </router-link>
+        <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
+          <NavIcon name="receipt" />
+          <span class="nav-label">{{ t('nav.orders') }}</span>
+        </router-link>
+        <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
+          <NavIcon name="wallet" />
+          <span class="nav-label">{{ t('nav.finance') }}</span>
+        </router-link>
+        <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
+          <NavIcon name="trend" />
+          <span class="nav-label">{{ t('nav.demandForecast') }}</span>
+        </router-link>
+        <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
+          <NavIcon name="doc" />
+          <span class="nav-label">{{ t('nav.reports') }}</span>
+        </router-link>
+      </nav>
+
+      <div class="sidebar-footer">
+        <!-- Footer dropdowns open upward: room below the footer block is clipped by sidebar edge. -->
         <LanguageSwitcher />
         <ProfileMenu
           @show-profile-details="showProfileDetails = true"
           @show-tasks="showTasks = true"
         />
       </div>
-    </header>
-    <FilterBar />
-    <main class="main-content">
-      <router-view />
+    </aside>
+
+    <!-- Main column -->
+    <main class="main">
+      <FilterBar />
+      <div class="main-content">
+        <router-view />
+      </div>
     </main>
 
+    <!-- Modals (props/events preserved from original App.vue) -->
     <ProfileDetailsModal
       :is-open="showProfileDetails"
       @close="showProfileDetails = false"
@@ -64,6 +87,7 @@ import ProfileMenu from './components/ProfileMenu.vue'
 import ProfileDetailsModal from './components/ProfileDetailsModal.vue'
 import TasksModal from './components/TasksModal.vue'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
+import NavIcon from './components/NavIcon.vue'
 
 export default {
   name: 'App',
@@ -72,7 +96,8 @@ export default {
     ProfileMenu,
     ProfileDetailsModal,
     TasksModal,
-    LanguageSwitcher
+    LanguageSwitcher,
+    NavIcon
   },
   setup() {
     const { currentUser } = useAuth()
@@ -162,210 +187,234 @@ export default {
 </script>
 
 <style>
+/* Global resets — tokens.css already sets body font, color, bg */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: #f8fafc;
-  color: #1e293b;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* ── App shell ─────────────────────────────────────────────────────────────── */
 
 .app {
   display: flex;
-  flex-direction: column;
   min-height: 100vh;
+  background: var(--bg);
 }
 
-.top-nav {
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+/* ── Sidebar ───────────────────────────────────────────────────────────────── */
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
   position: sticky;
   top: 0;
-  z-index: 100;
+  height: 100vh;
 }
 
-.nav-container {
-  max-width: 1600px;
-  margin: 0 auto;
+.sidebar-logo {
+  padding: var(--s-6) var(--s-5);
+  border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
-  padding: 0 2rem;
-  height: 70px;
+  gap: var(--s-3);
+  color: var(--accent);
 }
 
-.nav-container > .nav-tabs {
-  margin-left: auto;
-  margin-right: 1rem;
+.logo-text {
+  line-height: 1.2;
 }
 
-.nav-container > .language-switcher {
-  margin-right: 1rem;
-}
-
-.logo {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.logo h1 {
-  font-size: 1.375rem;
+.logo-name {
+  font-size: var(--fs-md);
   font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
 
-.subtitle {
-  font-size: 0.813rem;
-  color: #64748b;
-  font-weight: 400;
-  padding-left: 0.75rem;
-  border-left: 1px solid #e2e8f0;
+.logo-sub {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  color: var(--muted);
+  margin-top: 2px;
 }
 
-.nav-tabs {
+.sidebar-nav {
+  flex: 1;
+  padding: var(--s-4) var(--s-3);
   display: flex;
-  gap: 0.25rem;
+  flex-direction: column;
+  gap: var(--s-1);
+  overflow-y: auto;
 }
 
-.nav-tabs a {
-  padding: 0.625rem 1.25rem;
-  color: #64748b;
-  text-decoration: none;
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-body);
   font-weight: 500;
-  font-size: 0.938rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  color: var(--ink-2);
+  text-decoration: none;
   position: relative;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.nav-tabs a:hover {
-  color: #0f172a;
-  background: #f1f5f9;
+.sidebar-nav a:hover {
+  background: var(--surface-2);
+  color: var(--ink);
 }
 
-.nav-tabs a.active {
-  color: #2563eb;
-  background: #eff6ff;
+.sidebar-nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
-.nav-tabs a.active::after {
+/* Left 3px accent bar — stronger directional cue than background tint alone. */
+.sidebar-nav a.active::before {
   content: '';
   position: absolute;
-  bottom: -1px;
   left: 0;
-  right: 0;
-  height: 2px;
-  background: #2563eb;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.sidebar-footer {
+  padding: var(--s-4) var(--s-3);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* Footer dropdowns open upward — viewport below sidebar footer is clipped. */
+.sidebar-footer :deep(.dropdown-menu),
+.sidebar-footer :deep(.menu) {
+  bottom: 100%;
+  top: auto;
+  margin-bottom: var(--s-2);
+}
+
+/* ── Main column ───────────────────────────────────────────────────────────── */
+
+.main {
+  flex: 1;
+  min-width: 0; /* prevents wide tables from pushing sidebar wider */
+  display: flex;
+  flex-direction: column;
+}
+
+/* FilterBar sticky to top of main scroll region, not viewport top */
+.main > .filters-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bg);
 }
 
 .main-content {
-  flex: 1;
-  max-width: 1600px;
   width: 100%;
+  max-width: var(--content-max);
   margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: var(--s-8) var(--s-10);
 }
 
+/* ── Page header ───────────────────────────────────────────────────────────── */
+
 .page-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--s-8);
 }
 
 .page-header h2 {
-  font-size: 1.875rem;
+  font-size: var(--fs-h1);
   font-weight: 700;
-  color: #0f172a;
-  margin-bottom: 0.375rem;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 var(--s-2);
 }
 
 .page-header p {
-  color: #64748b;
-  font-size: 0.938rem;
+  font-size: var(--fs-body);
+  color: var(--muted);
+  margin: 0;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
-.stat-card {
-  background: white;
-  padding: 1.25rem;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
-}
-
-.stat-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-.stat-label {
-  color: #64748b;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.625rem;
-}
-
-.stat-value {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
-}
-
-.stat-card.warning .stat-value {
-  color: #ea580c;
-}
-
-.stat-card.success .stat-value {
-  color: #059669;
-}
-
-.stat-card.danger .stat-value {
-  color: #dc2626;
-}
-
-.stat-card.info .stat-value {
-  color: #2563eb;
-}
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
 
 .card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.25rem;
-  border: 1px solid #e2e8f0;
-  margin-bottom: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--s-5);
+  margin-bottom: var(--s-5);
+  /* No shadow on default cards — hairline rule is sufficient. */
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.875rem;
-  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line);
 }
 
 .card-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #0f172a;
-  letter-spacing: -0.025em;
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
 }
+
+/* ── Stat grid ─────────────────────────────────────────────────────────────── */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s-5);
+  margin-bottom: var(--s-8);
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: var(--s-5);
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: var(--s-2);
+}
+
+.stat-value {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-card.warning .stat-value { color: var(--warn); }
+.stat-card.success .stat-value { color: var(--success); }
+.stat-card.danger  .stat-value { color: var(--danger); }
+.stat-card.info    .stat-value { color: var(--info); }
+
+/* ── Tables ────────────────────────────────────────────────────────────────── */
 
 .table-container {
   overflow-x: auto;
@@ -377,26 +426,28 @@ table {
 }
 
 thead {
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--surface-2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 
 th {
   text-align: left;
-  padding: 0.5rem 0.75rem;
+  padding: var(--s-3) var(--s-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
   font-weight: 600;
-  color: #475569;
-  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--surface-2);
 }
 
 td {
-  padding: 0.5rem 0.75rem;
-  border-top: 1px solid #f1f5f9;
-  color: #334155;
-  font-size: 0.875rem;
+  padding: var(--s-3) var(--s-4);
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line);
 }
 
 tbody tr {
@@ -404,83 +455,76 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: #f8fafc;
+  background: var(--surface-2);
 }
+
+/* ── Badges ────────────────────────────────────────────────────────────────── */
 
 .badge {
   display: inline-block;
-  padding: 0.313rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  padding: var(--s-1) var(--s-3);
+  border-radius: 999px;
+  font-size: var(--fs-caption);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  /* Not uppercase — soft modernist aesthetic is restrained, badge text reads as-is. */
 }
 
-.badge.success {
-  background: #d1fae5;
-  color: #065f46;
-}
+.badge.success    { background: var(--success-soft); color: var(--success); }
+.badge.warning    { background: var(--warn-soft);    color: var(--warn); }
+.badge.danger     { background: var(--danger-soft);  color: var(--danger); }
+.badge.info       { background: var(--info-soft);    color: var(--info); }
 
-.badge.warning {
-  background: #fed7aa;
-  color: #92400e;
-}
+/* Trend badges */
+.badge.increasing { background: var(--success-soft); color: var(--success); }
+.badge.decreasing { background: var(--danger-soft);  color: var(--danger); }
+.badge.stable     { background: var(--surface-2);    color: var(--muted); }
 
-.badge.danger {
-  background: #fecaca;
-  color: #991b1b;
-}
+/* Priority badges — mapped to severity tokens */
+.badge.high       { background: var(--danger-soft);  color: var(--danger); }
+.badge.medium     { background: var(--warn-soft);    color: var(--warn); }
+.badge.low        { background: var(--info-soft);    color: var(--info); }
 
-.badge.info {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.badge.increasing {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.badge.decreasing {
-  background: #fecaca;
-  color: #991b1b;
-}
-
-.badge.stable {
-  background: #e0e7ff;
-  color: #3730a3;
-}
-
-.badge.high {
-  background: #fecaca;
-  color: #991b1b;
-}
-
-.badge.medium {
-  background: #fed7aa;
-  color: #92400e;
-}
-
-.badge.low {
-  background: #dbeafe;
-  color: #1e40af;
-}
+/* ── Loading & error states ────────────────────────────────────────────────── */
 
 .loading {
   text-align: center;
-  padding: 3rem;
-  color: #64748b;
-  font-size: 0.938rem;
+  padding: var(--s-12);
+  color: var(--muted);
+  font-size: var(--fs-body);
 }
 
 .error {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
-  padding: 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
-  font-size: 0.938rem;
+  background: var(--danger-soft);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  margin: var(--s-4) 0;
+  font-size: var(--fs-body);
+}
+
+/* ── Responsive: collapse sidebar to icon-only below 1100px ────────────────── */
+
+/* 1100px chosen: sidebar 232 + main padding 80 + readable content 720 ≈ 1032px minimum.
+   1100px gives breathing room before collapse. */
+@media (max-width: 1100px) {
+  .sidebar {
+    width: var(--sidebar-w-compact);
+    flex-basis: var(--sidebar-w-compact);
+  }
+
+  .sidebar .nav-label,
+  .sidebar-logo .logo-text {
+    display: none;
+  }
+
+  .sidebar-nav a {
+    justify-content: center;
+    padding: var(--s-3);
+  }
+
+  .main-content {
+    padding: var(--s-6) var(--s-5);
+  }
 }
 </style>

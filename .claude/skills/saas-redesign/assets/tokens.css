@@ -1,0 +1,119 @@
+/* saas-redesign — soft modernist refined light edition.
+   Warm paper, deep teal accent, hairline rules, Geist type stack.
+   Imported once from client/src/main.js. */
+
+:root {
+  /* Surfaces — warm paper, not slate */
+  --bg: #f8f5ef;
+  --surface: #ffffff;
+  --surface-2: #f1ede4;
+  --surface-sunken: #ebe5d8;
+
+  /* Ink — warm near-black, not pure blue-slate */
+  --ink: #1a1612;
+  --ink-2: #3d362f;
+  --muted: #7a7268;
+  --muted-2: #a89e92;
+
+  /* Hairlines — warm, low-contrast */
+  --line: #e6dfd4;
+  --line-strong: #cfc6b6;
+
+  /* Accent — deep teal, single saturated voice */
+  --accent: #0f766e;
+  --accent-soft: #ccfbf1;
+  --accent-strong: #115e59;
+  --accent-ink: #134e4a;
+
+  /* Status — warm-leaning, harmonized with the paper */
+  --success: #15803d;
+  --success-soft: #dcfce7;
+  --warn: #b45309;
+  --warn-soft: #fef3c7;
+  --danger: #b91c1c;
+  --danger-soft: #fee2e2;
+  --info: #1d4ed8;
+  --info-soft: #dbeafe;
+
+  /* Spacing — 8pt grid */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  /* Radii — small, restrained */
+  --r-sm: 4px;
+  --r-md: 6px;
+  --r-lg: 10px;
+
+  /* Shadows — almost invisible, warm tint. Soft modernist relies on hairlines, not shadow. */
+  --shadow-xs: 0 1px 0 rgba(26, 22, 18, 0.02);
+  --shadow-sm: 0 1px 2px rgba(26, 22, 18, 0.04);
+  --shadow-md: 0 4px 12px rgba(26, 22, 18, 0.06);
+  --shadow-lg: 0 16px 32px rgba(26, 22, 18, 0.08);
+
+  /* Typography — Geist for sans, Geist Mono for numerics & eyebrow. Loaded via Google Fonts. */
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --fs-eyebrow: 11px;
+  --fs-caption: 12px;
+  --fs-small: 13px;
+  --fs-body: 14px;
+  --fs-md: 15px;
+  --fs-lg: 17px;
+  --fs-xl: 20px;
+  --fs-h2: 26px;
+  --fs-h1: 34px;
+  --fs-display: 44px;
+
+  /* Layout */
+  --sidebar-w: 232px;
+  --sidebar-w-compact: 64px;
+  --content-max: 1360px;
+  --sidebar-breakpoint: 1100px;
+}
+
+/* Base — tokens-aware. Per-component styling lives in .vue files. */
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+* { box-sizing: border-box; }
+
+a { color: inherit; text-decoration: none; }
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+/* Numerals — tabular for data tables, dashboards, KPIs. */
+.tnum, .data-table td, .stat-value, .kpi-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mono eyebrow — adds editorial-modernist edge to small uppercase labels. */
+.eyebrow,
+.stat-label,
+th,
+.data-table th {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
