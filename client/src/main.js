@@ -1,3 +1,5 @@
+// Tokens must load before any component mounts so `var(--...)` resolves on first paint.
+import './styles/tokens.css'
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'

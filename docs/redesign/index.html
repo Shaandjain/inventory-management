@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SaaS Redesign — Before / After</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f5ef;
+    --surface: #ffffff;
+    --surface-2: #f1ede4;
+    --ink: #1a1612;
+    --muted: #7a7268;
+    --line: #e6dfd4;
+    --accent: #0f766e;
+    --accent-soft: #ccfbf1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1680px; margin: 0 auto; padding: 64px 40px 96px; }
+  .eyebrow {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  h1 {
+    margin: 0 0 8px;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  p.lede {
+    margin: 0 0 16px;
+    color: var(--muted);
+    max-width: 640px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .meta {
+    display: flex;
+    gap: 24px;
+    margin: 24px 0 48px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .meta strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .row {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .row-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .row-header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .row-header code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface-2);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+  }
+  figure {
+    margin: 0;
+    padding: 20px;
+    background: var(--surface-2);
+  }
+  figcaption {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  figcaption .bar {
+    display: inline-block;
+    width: 16px;
+    height: 2px;
+    background: var(--muted);
+  }
+  figure.after figcaption .bar { background: var(--accent); }
+  figure.after figcaption { color: var(--accent); }
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: white;
+  }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Geist Mono', monospace;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">saas-redesign · soft modernist refined light</div>
+  <h1>Before / After</h1>
+  <p class="lede">
+    Inventory-management Vue 3 app redesigned from a top-nav SPA to a sidebar SaaS shell with a locked design system: warm paper surfaces, deep teal accent, Geist + Geist Mono, hairline rules over shadows.
+  </p>
+  <div class="meta">
+    <span><strong>Aesthetic</strong> soft modernist · light</span>
+    <span><strong>Type</strong> Geist / Geist Mono</span>
+    <span><strong>Accent</strong> #0f766e teal</span>
+    <span><strong>Surface</strong> #f8f5ef paper</span>
+    <span><strong>Routes</strong> 6</span>
+  </div>
+
+  <section class="row">
+    <div class="row-header"><h2>Overview</h2><code>/</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-overview.png" alt="Overview before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-overview.png" alt="Overview after"></figure>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-header"><h2>Inventory</h2><code>/inventory</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-inventory.png" alt="Inventory before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-inventory.png" alt="Inventory after"></figure>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-header"><h2>Orders</h2><code>/orders</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-orders.png" alt="Orders before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-orders.png" alt="Orders after"></figure>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-header"><h2>Finance</h2><code>/spending</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-spending.png" alt="Finance before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-spending.png" alt="Finance after"></figure>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-header"><h2>Demand Forecast</h2><code>/demand</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-demand.png" alt="Demand before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-demand.png" alt="Demand after"></figure>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-header"><h2>Reports</h2><code>/reports</code></div>
+    <div class="pair">
+      <figure class="before"><figcaption><span class="bar"></span>Before</figcaption><img src="before-reports.png" alt="Reports before"></figure>
+      <figure class="after"><figcaption><span class="bar"></span>After</figcaption><img src="after-reports.png" alt="Reports after"></figure>
+    </div>
+  </section>
+
+  <footer>
+    Generated by the saas-redesign skill · docs/redesign/index.html
+  </footer>
+</div>
+</body>
+</html>

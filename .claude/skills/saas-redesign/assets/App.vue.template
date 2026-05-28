@@ -1,0 +1,254 @@
+<!--
+  App.vue template — saas-redesign sidebar shell.
+
+  Reference for vue-expert during Phase 4. Adapt to the current App.vue's
+  existing imports, composables, and modal state. Do not paste verbatim —
+  match the existing component-registration pattern (Composition API,
+  whichever of <script setup> vs default-export setup() the file uses).
+
+  Hard rules to preserve:
+  - LanguageSwitcher and ProfileMenu mount with identical props/events as today.
+  - FilterBar mounts inside <main>, sticky to top.
+  - Modal state (showProfileDetails, showTasks) preserved.
+  - Nav labels use t('nav.<key>') — keys already exist in client/src/locales/en.js and ja.js.
+  - No emojis.
+-->
+<template>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <!-- Logo mark (inline SVG, single color, scales with currentColor) -->
+        <svg class="logo-mark" width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="3" width="7" height="7" rx="1.5" fill="currentColor" />
+          <rect x="14" y="3" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.7" />
+          <rect x="3" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.7" />
+          <rect x="14" y="14" width="7" height="7" rx="1.5" fill="currentColor" opacity="0.4" />
+        </svg>
+        <div class="logo-text">
+          <div class="logo-name">{{ t('nav.companyName') }}</div>
+          <div class="logo-sub">{{ t('nav.subtitle') }}</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Main">
+        <router-link to="/" :class="{ active: $route.path === '/' }">
+          <NavIcon name="grid" />
+          <span class="nav-label">{{ t('nav.overview') }}</span>
+        </router-link>
+        <router-link to="/inventory" :class="{ active: $route.path === '/inventory' }">
+          <NavIcon name="box" />
+          <span class="nav-label">{{ t('nav.inventory') }}</span>
+        </router-link>
+        <router-link to="/orders" :class="{ active: $route.path === '/orders' }">
+          <NavIcon name="receipt" />
+          <span class="nav-label">{{ t('nav.orders') }}</span>
+        </router-link>
+        <router-link to="/spending" :class="{ active: $route.path === '/spending' }">
+          <NavIcon name="wallet" />
+          <span class="nav-label">{{ t('nav.finance') }}</span>
+        </router-link>
+        <router-link to="/demand" :class="{ active: $route.path === '/demand' }">
+          <NavIcon name="trend" />
+          <span class="nav-label">{{ t('nav.demandForecast') }}</span>
+        </router-link>
+        <router-link to="/reports" :class="{ active: $route.path === '/reports' }">
+          <NavIcon name="doc" />
+          <span class="nav-label">{{ t('nav.reports') }}</span>
+        </router-link>
+      </nav>
+
+      <div class="sidebar-footer">
+        <LanguageSwitcher />
+        <ProfileMenu
+          @show-profile-details="showProfileDetails = true"
+          @show-tasks="showTasks = true"
+        />
+      </div>
+    </aside>
+
+    <!-- Main column -->
+    <main class="main">
+      <FilterBar />
+      <div class="main-content">
+        <router-view />
+      </div>
+    </main>
+
+    <!-- Modals (preserve from current App.vue) -->
+    <ProfileDetailsModal
+      v-if="showProfileDetails"
+      @close="showProfileDetails = false"
+    />
+    <TasksModal
+      v-if="showTasks"
+      @close="showTasks = false"
+    />
+  </div>
+</template>
+
+<script>
+import { ref } from 'vue'
+import FilterBar from './components/FilterBar.vue'
+import LanguageSwitcher from './components/LanguageSwitcher.vue'
+import ProfileMenu from './components/ProfileMenu.vue'
+import ProfileDetailsModal from './components/ProfileDetailsModal.vue'
+import TasksModal from './components/TasksModal.vue'
+import NavIcon from './components/NavIcon.vue' // small inline-SVG icon component (author if missing)
+import { useI18n } from './composables/useI18n'
+
+export default {
+  name: 'App',
+  components: {
+    FilterBar,
+    LanguageSwitcher,
+    ProfileMenu,
+    ProfileDetailsModal,
+    TasksModal,
+    NavIcon
+  },
+  setup() {
+    const { t } = useI18n()
+    const showProfileDetails = ref(false)
+    const showTasks = ref(false)
+
+    return {
+      t,
+      showProfileDetails,
+      showTasks
+    }
+  }
+}
+</script>
+
+<style>
+/* Global tokens are imported in main.js (client/src/styles/tokens.css). */
+
+.app {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* Sidebar ----------------------------------------------------------------- */
+
+.sidebar {
+  width: var(--sidebar-w);
+  flex: 0 0 var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebar-logo {
+  padding: var(--s-6) var(--s-5);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  color: var(--accent);
+}
+.logo-text { line-height: 1.2; }
+.logo-name {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.logo-sub {
+  font-size: var(--fs-caption);
+  color: var(--muted);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: var(--s-4) var(--s-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  overflow-y: auto;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-sm);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  color: var(--ink-2);
+  position: relative;
+  transition: background-color .15s ease, color .15s ease;
+}
+.sidebar-nav a:hover {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.sidebar-nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+/* Left accent bar — stronger directional cue than background alone. */
+.sidebar-nav a.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+}
+
+.sidebar-footer {
+  padding: var(--s-4) var(--s-3);
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+/* Footer dropdowns open upward in the sidebar (room is below the screen edge). */
+.sidebar-footer .dropdown,
+.sidebar-footer .menu {
+  bottom: 100%;
+  top: auto;
+  margin-bottom: var(--s-2);
+}
+
+/* Main -------------------------------------------------------------------- */
+
+.main {
+  flex: 1;
+  min-width: 0; /* prevents wide tables from forcing sidebar wider */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-10);
+}
+
+/* Responsive ------------------------------------------------------------- */
+
+/* 1100px chosen because: sidebar 248 + main padding 80 + readable content 720 ≈ 1048px.
+   Below that, collapse to icon-only sidebar. */
+@media (max-width: 1100px) {
+  .sidebar {
+    width: var(--sidebar-w-compact);
+    flex-basis: var(--sidebar-w-compact);
+  }
+  .sidebar .nav-label,
+  .sidebar-logo .logo-text { display: none; }
+  .sidebar-nav a { justify-content: center; padding: var(--s-3); }
+  .main-content { padding: var(--s-6) var(--s-5); }
+}
+</style>
