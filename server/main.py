@@ -228,12 +228,22 @@ def get_recent_transactions():
     return recent_transactions
 
 @app.get("/api/reports/quarterly")
-def get_quarterly_reports():
-    """Get quarterly performance reports"""
-    # Calculate quarterly statistics from orders
+def get_quarterly_reports(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
+    """Get quarterly performance reports, optionally filtered."""
+    # Reuse the shared filter helper for warehouse/category/status; month filter is
+    # applied below as a substring match because order_date is a full ISO date.
+    filtered_orders = apply_filters(orders, warehouse, category, status)
+    if month and month != 'all':
+        filtered_orders = [o for o in filtered_orders if o.get('order_date', '').startswith(month)]
+
     quarters = {}
 
-    for order in orders:
+    for order in filtered_orders:
         order_date = order.get('order_date', '')
         # Determine quarter
         if '2025-01' in order_date or '2025-02' in order_date or '2025-03' in order_date:
@@ -274,11 +284,20 @@ def get_quarterly_reports():
     return result
 
 @app.get("/api/reports/monthly-trends")
-def get_monthly_trends():
-    """Get month-over-month trends"""
+def get_monthly_trends(
+    warehouse: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    month: Optional[str] = None
+):
+    """Get month-over-month trends, optionally filtered."""
+    filtered_orders = apply_filters(orders, warehouse, category, status)
+    if month and month != 'all':
+        filtered_orders = [o for o in filtered_orders if o.get('order_date', '').startswith(month)]
+
     months = {}
 
-    for order in orders:
+    for order in filtered_orders:
         order_date = order.get('order_date', '')
         if not order_date:
             continue
